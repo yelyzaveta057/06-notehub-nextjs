@@ -4,7 +4,7 @@ import NoteDetailsClient from './NoteDetails.client'
 import { fetchNoteById } from '../../../lib/api'
 
 type Props = {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 };
 
 const NoteDetails = async ({ params }: Props) => {
