@@ -20,6 +20,7 @@ export type NoteListResponse = {
 
 axios.defaults.baseURL = "https://next-docs-api.onrender.com";
 
+
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const getNotes = async () => {
