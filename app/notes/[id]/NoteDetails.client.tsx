@@ -1,39 +1,59 @@
-// app/notes/[id]/NoteDetails.client.tsx
+import { useState } from "react";
+import { fetchNotes } from "../../services/noteService";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useDebounce } from "use-debounce";
 
-"use client";
+import NoteList from "../NoteList/NoteList";
+import NoteModal from "../NoteModal/NoteModal";
+import SearchBox from "../SearchBox/SearchBox";
+import Pagination from "../Pagination/Pagination";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from 'next/navigation';
-import { getSingleNote } from "@/src/lib/api";
+//css
+import css from "./App.module.css";
 
-const NoteDetailsClient = () => {
-	const { id } = useParams<{ id: string }>();
+export default function App() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [debounceSearchTerm] = useDebounce(searchTerm, 1000);
+  const perPage = 12;
 
-  const { data: note, isLoading, error } = useQuery({
-    queryKey: ["note", id],
-    queryFn: () => getSingleNote(id),
-    refetchOnMount: false,
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["notes", debounceSearchTerm, currentPage],
+    queryFn: () => fetchNotes(currentPage, debounceSearchTerm, perPage),
+    placeholderData: keepPreviousData,
   });
 
-  if (isLoading) return <p>Loading...</p>;
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
-  if (error || !note) return <p>Some error..</p>;
-
-  const formattedDate = note.updatedAt
-    ? `Updated at: ${note.updatedAt}`
-    : `Created at: ${note.createdAt}`;
+  const handleSearchChange = (newTerm: string) => {
+    setSearchTerm(newTerm);
+    setCurrentPage(1);
+  };
 
   return (
-   <div className={css.container}>
-	<div className={css.item}>
-	  <div className={css.header}>
-	    <h2>Note title</h2>
-	  </div>
-	  <p className={css.content}>Note content</p>
-	  <p className={css.date}>Created date</p>
-	</div>
-</div>
+    <div className={css.app}>
+      <header className={css.toolbar}>
+        <SearchBox value={searchTerm} onChange={handleSearchChange} />
+        {data && data.totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            pageCount={data.totalPages}
+            onPageChange={setCurrentPage}
+          />
+        )}
+        <button className={css.button} onClick={openModal}>
+          Create note +
+        </button>
+      </header>
+      {isLoading && <strong className={css.loading}>Loading notes...</strong>}
+      {isError && searchTerm.trim() !== "" && (
+        <ErrorMessage message="Something went wrong. Please try again." />
+      )}
+      {data && <NoteList notes={data.notes} />}
+      {isModalOpen && <NoteModal onClose={closeModal} onSuccess={closeModal} />}
+    </div>
   );
-};
-
-export default NoteDetailsClient;
+}
