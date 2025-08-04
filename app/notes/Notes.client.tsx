@@ -1,17 +1,17 @@
 // app/notes/[id]/NoteDetails.client.tsx
 
 "use client";
-
+import { fetchNoteById } from "@/src/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from 'next/navigation';
-import { getSingleNote } from "@/src/lib/api";
+
 
 const NoteDetailsClient = () => {
 	const { id } = useParams<{ id: string }>();
 
   const { data: note, isLoading, error } = useQuery({
     queryKey: ["note", id],
-    queryFn: () => getSingleNote(id),
+    queryFn: () => fetchNoteById(Number(id)),
     refetchOnMount: false,
   });
 
