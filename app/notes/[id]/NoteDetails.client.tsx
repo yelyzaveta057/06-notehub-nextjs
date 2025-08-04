@@ -2,21 +2,20 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { fetchNoteById } from "@/lib/api";
+import { fetchNoteById } from "../../../lib/api";
 
 import css from "./NoteDetails.module.css";
 
-type Props = {
-  noteId: number;
-};
+const NoteDetailsClient = () => {
+  const { id } = useParams<{ id: string }>();
+  const noteId = Number(id);
 
-const NoteDetailsClient = ({ noteId }: Props) => {
   const {
     data: note,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["note", noteId],
+    queryKey: ["note", id],
     queryFn: () => fetchNoteById(noteId),
     refetchOnMount: false,
   });
