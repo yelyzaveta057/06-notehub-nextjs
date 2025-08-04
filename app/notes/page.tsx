@@ -1,7 +1,7 @@
 
 
 import { useState } from "react";
-import { fetchNotes } from "@/src/services/noteService";
+import { fetchNotes } from "@/lib/api";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
 

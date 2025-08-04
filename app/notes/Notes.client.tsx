@@ -1,7 +1,7 @@
 // app/notes/[id]/NoteDetails.client.tsx
 
 "use client";
-import { fetchNoteById } from "@/src/lib/api";
+import { fetchNoteById } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from 'next/navigation';
 
