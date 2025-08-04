@@ -1,5 +1,4 @@
-
-
+'use client'
 import { useState } from "react";
 import { fetchNotes } from "@/lib/api";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -12,7 +11,7 @@ import NoteList from "@/components/NoteList/NoteList";
 import NoteModal from "@/components/NoteModal/NoteModal";
 
 //css
-import css from "./App.module.css";
+import css from "./NotesPage.module.css"
 
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
