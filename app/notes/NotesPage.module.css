@@ -29,4 +29,21 @@
   .button:hover {
     background-color: #0b5ed7;
   }
+
+  .loading {
+    text-align: center;
+    color: #6c757d;
+    font-size: 18px;
+    margin: 20px 0;
+  }
+
+  .error {
+    text-align: center;
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    padding: 16px;
+    margin: 20px 0;
+  }
   
