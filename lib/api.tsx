@@ -22,29 +22,66 @@ export const fetchNotes = async (
   query = '',
   perPage = 12
 ): Promise<FetchNotesResponse> => {
-  const params = {
-    page: page.toString(),
-    perPage: perPage.toString(),
-    ...(query.trim() && { search: query }),
-  };
+  try {
+    if (!TOKEN) {
+      throw new Error('Token is not configured. Please set NEXT_PUBLIC_NOTEHUB_TOKEN environment variable.');
+    }
 
+    const params = {
+      page: page.toString(),
+      perPage: perPage.toString(),
+      ...(query.trim() && { search: query }),
+    };
 
-  const res = await noteServiceClient.get<FetchNotesResponse>('/notes?{ params }');
-  console.log("🔍 Full Axios Response:", res);
-  return res.data;
+    console.log("🔍 Fetching notes with params:", params);
+    const res = await noteServiceClient.get<FetchNotesResponse>('/notes', { params });
+    console.log("🔍 Full Axios Response:", res);
+    return res.data;
+  } catch (error) {
+    console.error("❌ Error fetching notes:", error);
+    throw error;
+  }
 };
 export const fetchNoteById = async (id: string): Promise<Note> => {
-  const res = await noteServiceClient.get<Note>(`/note/${id}`);
-  return res.data;
+  try {
+    if (!TOKEN) {
+      throw new Error('Token is not configured. Please set NEXT_PUBLIC_NOTEHUB_TOKEN environment variable.');
+    }
+    
+    const res = await noteServiceClient.get<Note>(`/note/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error("❌ Error fetching note by id:", error);
+    throw error;
+  }
 };
 
 export const createNote = async (noteData: NewNoteData): Promise<Note> => {
-  const res = await noteServiceClient.post<Note>('/note', noteData);
-  
-  return res.data;
+  try {
+    if (!TOKEN) {
+      throw new Error('Token is not configured. Please set NEXT_PUBLIC_NOTEHUB_TOKEN environment variable.');
+    }
+    
+    console.log("🔍 Creating note with data:", noteData);
+    const res = await noteServiceClient.post<Note>('/note', noteData);
+    console.log("🔍 Create note response:", res);
+    return res.data;
+  } catch (error) {
+    console.error("❌ Error creating note:", error);
+    throw error;
+  }
 };
 
 export const deleteNote = async (noteId: string): Promise<Note> => {
-  const res = await noteServiceClient.delete<Note>(`/note/${noteId}`);
-  return res.data;
+  try {
+    if (!TOKEN) {
+      throw new Error('Token is not configured. Please set NEXT_PUBLIC_NOTEHUB_TOKEN environment variable.');
+    }
+    
+    const res = await noteServiceClient.delete<Note>(`/note/${noteId}`);
+    return res.data;
+  } catch (error) {
+    console.error("❌ Error deleting note:", error);
+    throw error;
+  }
 };
