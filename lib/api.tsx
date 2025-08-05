@@ -11,27 +11,32 @@ const noteServiceClient = axios.create({
   },
 });
 
-interface NotesHttpResponse {
+export interface NotesHttpResponse {
   notes: Note[];
   totalPages: number;
 }
 
 export const fetchNotes = async (
-  query: string,
-  page: number
+  query: string = "",
+  page: number = 1,
+  perPage: number = 12
 ): Promise<NotesHttpResponse> => {
   const params: Record<string, string> = {
     page: page.toString(),
+    perPage: perPage.toString(),
   };
 
   if (query.trim()) {
     params.search = query;
   }
 
-  const res = await noteServiceClient.get<NotesHttpResponse>('/notes', { params });
+  const response = await noteServiceClient.get<NotesHttpResponse>('/notes', { params });
 
-  return res.data;
+  console.log("➡️ FETCH notes", params);
+
+  return response.data;
 };
+
 
 export const fetchNoteById = async (id: string): Promise<Note> => {
   const res = await noteServiceClient.get<Note>(`/notes/${id}`);
