@@ -2,8 +2,8 @@ import axios from 'axios';
 import type { Note, NewNoteData } from '../types/note';
 
 const BASE_URL = "https://notehub-public.goit.study/api";
-
 const TOKEN = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
+console.log("🔐 Token:", TOKEN);
 
 const noteServiceClient = axios.create({
   baseURL: BASE_URL,
@@ -22,30 +22,29 @@ export const fetchNotes = async (
   query = '',
   perPage = 12
 ): Promise<FetchNotesResponse> => {
-  const params: Record<string, string | number> = { page, perPage };
-  if (query.trim()) params.search = query;
+  const params = {
+    page: page.toString(),
+    perPage: perPage.toString(),
+    ...(query.trim() && { search: query }),
+  };
 
-  const res = await noteServiceClient.get<FetchNotesResponse>('/notes', { params });
 
+  const res = await noteServiceClient.get<FetchNotesResponse>('/notes?{ params }');
+  console.log("🔍 Full Axios Response:", res);
   return res.data;
-  
 };
-
-
-
-export const fetchNoteById = async (id: number): Promise<Note> => {
-  const res = await noteServiceClient.get<Note>(`/notes/${id}`);
+export const fetchNoteById = async (id: string): Promise<Note> => {
+  const res = await noteServiceClient.get<Note>(`/note/${id}`);
   return res.data;
 };
 
 export const createNote = async (noteData: NewNoteData): Promise<Note> => {
-  const res = await noteServiceClient.post<Note>('/notes', noteData);
+  const res = await noteServiceClient.post<Note>('/note', noteData);
+  
   return res.data;
 };
 
-export const deleteNote = async (noteId: number): Promise<Note> => {
-  const res = await noteServiceClient.delete<Note>(`/notes/${noteId}`);
+export const deleteNote = async (noteId: string): Promise<Note> => {
+  const res = await noteServiceClient.delete<Note>(`/note/${noteId}`);
   return res.data;
 };
-
-console.log("🔐 Token:", TOKEN);

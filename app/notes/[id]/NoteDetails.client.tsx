@@ -8,7 +8,7 @@ import css from "./NoteDetails.module.css";
 
 const NoteDetailsClient = () => {
   const { id } = useParams<{ id: string }>();
-  const noteId = Number(id);
+  const noteId = id;
 
   const {
     data: note,
