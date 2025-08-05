@@ -20,7 +20,7 @@ export default function App() {
   const [debounceSearchTerm] = useDebounce(searchTerm, 1000);
   const perPage = 12;
 
-  const { data, isLoading} = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["notes", debounceSearchTerm, currentPage],
     queryFn: () => fetchNotes(currentPage, debounceSearchTerm, perPage),
     placeholderData: keepPreviousData,
@@ -50,6 +50,11 @@ export default function App() {
         </button>
       </header>
       {isLoading && <strong className={css.loading}>Loading notes...</strong>}
+      {error && (
+        <div className={css.error}>
+          <strong>Error loading notes:</strong> {error.message}
+        </div>
+      )}
       {data && <NoteList notes={data.notes} />}
       {isModalOpen && <NoteModal onClose={closeModal} onSuccess={closeModal} />}
     </div>
