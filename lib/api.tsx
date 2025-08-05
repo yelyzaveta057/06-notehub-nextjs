@@ -38,6 +38,7 @@ export const fetchNotes = async (
 };
 
 
+
 export const fetchNoteById = async (id: string): Promise<Note> => {
   const res = await noteServiceClient.get<Note>(`/notes/${id}`);
   return res.data;
