@@ -28,7 +28,7 @@ const NoteDetailsClient = () => {
       <div className={css.item}>
         <div className={css.header}>
           <h2>{note.title}</h2>
-          <button className={css.editBtn}>Edit note</button>
+          <button className={css.editButton}>Edit note</button>
         </div>
         <p className={css.content}>{note.content}</p>
         <p className={css.date}>{note.createdAt}</p>

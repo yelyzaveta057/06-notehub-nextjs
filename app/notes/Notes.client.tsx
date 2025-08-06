@@ -7,7 +7,8 @@ import { fetchNotes } from "@/lib/api";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import Pagination from "@/components/Pagination/Pagination";
 import NoteList from "@/components/NoteList/NoteList";
-import NoteModal from "@/components/Modal/Modal";
+
+import NoteModal from "@/components/NoteModal/NoteModal";
 
 import type { NotesHttpResponse } from "../../lib/api";
 import css from "./NotesPage.module.css";
@@ -64,7 +65,9 @@ const { data, isLoading, error } = useQuery({
         </div>
       )}
       {data && <NoteList notes={data.notes} />}
-      {isModalOpen && <NoteModal onClose={closeModal} onSuccess={closeModal} />}
+      {isModalOpen && (
+  <NoteModal onClose={closeModal} onSuccess={closeModal} />
+)}
     </div>
   );
 }
